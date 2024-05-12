@@ -40,7 +40,7 @@ class Screen():
     def display_message(self, messages, color= None):
         self.clear_screen()
         for message in messages:
-            self.make_text(message, 0, 8 * messages.index(message) + 1, color or self.default_color)
+            self.make_text(message, 0, 8 * messages.index(message), color or self.default_color)
         self.cosmic_unicorn.update(self.graphics)
 
     def set_trams(self, trams):
@@ -57,9 +57,11 @@ class Screen():
         self.clear_screen()
 
         for tram in self.trams:
-            self.make_text(tram.get_text(), tram.x, tram.y)
+            tram.update(time_ms)
             self.graphics.set_pen(self.graphics.create_pen(*tram.get_status_color()))
-            self.graphics.line(tram.x, tram.y + 7 , self.width, tram.y + 7)
+            self.graphics.line(tram.destination_x, tram.y + 7 , self.width, tram.y + 7)
+            self.make_text(tram.get_destination_text(), tram.destination_x, tram.y)
+            self.make_text(tram.get_wait_text(), tram.wait_x, tram.y)
 
         if self.message:
             self.message.update(time_ms)

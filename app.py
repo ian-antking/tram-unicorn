@@ -21,14 +21,14 @@ class App:
 
     def connect_wifi(self, retries=0):
         message = ["wait", "for", "wifi"]
-        if retries > 0: message.append("retry{retries}".format(retries=retries))
+        if retries > 0: message.append("retry {retries}".format(retries=retries))
         self.screen.display_message(message, (0, 255, 255))
         try:
             uasyncio.get_event_loop().run_until_complete(self.network.client(WIFI_CONFIG.SSID, WIFI_CONFIG.PSK))
         except Exception as e:
             self.screen.display_message(["wifi", "fail"], COLORS.ERROR)
             print(f'Wifi connection failed! {e}')
-            time.sleep(10)
+            time.sleep(10 ^ retries)
             self.connect_wifi(retries+1)
 
     def display_incoming(self):
@@ -76,9 +76,8 @@ class App:
                     self.connect_wifi()
 
                 self.last_update_time = time_ms
-                self.tram_station.get()
                 self.screen.set_trams(self.tram_station.trams)
                 if not self.screen.message:                    
                     self.screen.set_message(self.tram_station.message)
             
-            self.screen.update(time_ms)
+            self.screen.update(time_ms)         
