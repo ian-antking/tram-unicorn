@@ -7,8 +7,7 @@ class Station:
         self.query = "?$filter=stationLocation eq '{station}'".format(station = station_name).replace(" ", "%20")
         self.direction = direction
         self.api_key = api_key
-        self.trams = []
-        self.message = ""
+        self.last_update = ""
 
     def set_destination(self, direction):
         self.direction = direction
@@ -18,30 +17,42 @@ class Station:
         data = response.json()
         response.close()
 
-        trams = data["value"]
-        filtered_trams = [tram for tram, tram in enumerate(trams) if tram["Direction"] == self.direction]
+        trams_data = data["value"]
+        filtered_trams = [tram for tram, tram in enumerate(trams_data) if tram["Direction"] == self.direction]
 
-        trams = filtered_trams[0]
-        self.trams = []
+        trams_data = filtered_trams[0]
+        if trams_data["LastUpdated"] != self.last_update:
+            self.last_update = trams_data["LastUpdated"]
+            trams = []
 
-        message = trams["MessageBoard"]
-        self.message = message if message != "<no message>" else "Displaying {direction} trams for {station}".format(direction=self.direction, station=self.station_name)
-        
-        if trams["Dest0"]: self.trams.append({
-            "destination": trams["Dest0"],
-            "wait": trams["Wait0"],
-            "status": trams["Status0"]
-        })
+            message_data = trams_data["MessageBoard"]
+            message = message_data if message_data != "<no message>" else "Displaying {direction} trams for {station}".format(direction=self.direction, station=self.station_name)
             
-        if trams["Dest1"]: self.trams.append({
-            "destination": trams["Dest1"],
-            "wait": trams["Wait1"],
-            "status": trams["Status1"]
-        })
+            if trams_data["Dest0"]: trams.append({
+                "destination": trams_data["Dest0"],
+                "wait": trams_data["Wait0"],
+                "status": trams_data["Status0"]
+            })
+                
+            if trams_data["Dest1"]: trams.append({
+                "destination": trams_data["Dest1"],
+                "wait": trams_data["Wait1"],
+                "status": trams_data["Status1"]
+            })
 
-        if trams["Dest2"]: self.trams.append({
-            "destination": trams["Dest2"],
-            "wait": trams["Wait2"],
-            "status": trams["Status2"]
-        })
+            if trams_data["Dest2"]: trams.append({
+                "destination": trams_data["Dest2"],
+                "wait": trams_data["Wait2"],
+                "status": trams_data["Status2"]
+            })
+                
+            return {
+                "trams": trams,
+                "message": message
+            }
+                
+        return {
+            "trams": [],
+            "message": ""
+        }
 

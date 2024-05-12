@@ -14,10 +14,8 @@ class App:
         self.last_update_time = 0
 
         self.connect_wifi()
+        self.get_data()
 
-        self.tram_station.get()
-        self.screen.set_message(self.tram_station.message)
-        self.screen.set_trams(self.tram_station.trams)
 
     def connect_wifi(self, retries=0):
         message = ["wait", "for", "wifi"]
@@ -32,9 +30,10 @@ class App:
             self.connect_wifi(retries+1)
 
     def get_data(self):
-            self.tram_station.get()
-            self.screen.set_message(self.tram_station.message)
-            self.screen.set_trams(self.tram_station.trams)
+        data = self.tram_station.get()
+        self.screen.set_trams(data["trams"])
+        self.screen.set_message(data["message"])
+
 
     def display_incoming(self):
             self.tram_station.set_destination(DIRECTIONS[0])
@@ -81,8 +80,9 @@ class App:
                     self.connect_wifi()
 
                 self.last_update_time = time_ms
-                self.screen.set_trams(self.tram_station.trams)
-                if not self.screen.message:                    
-                    self.screen.set_message(self.tram_station.message)
+                data = self.tram_station.get()
+
+                if len(data["trams"]): self.screen.set_trams(data["trams"])
+                if not self.screen.message: self.screen.set_message(data["message"])
             
             self.screen.update(time_ms)         
