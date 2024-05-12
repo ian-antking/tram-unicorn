@@ -31,15 +31,20 @@ class App:
             time.sleep(10 ^ retries)
             self.connect_wifi(retries+1)
 
+    def get_data(self):
+            self.tram_station.get()
+            self.screen.set_message(self.tram_station.message)
+            self.screen.set_trams(self.tram_station.trams)
+
     def display_incoming(self):
             self.tram_station.set_destination(DIRECTIONS[0])
             self.screen.display_message(["getting", DIRECTIONS[0], "trams"], COLORS.INFO)
-            self.tram_station.get()
+            self.get_data()
 
     def display_outgoing(self):
             self.tram_station.set_destination(DIRECTIONS[1])
             self.screen.display_message(["getting", DIRECTIONS[1], "trams"], COLORS.INFO)
-            self.tram_station.get()
+            self.get_data()
 
     def handle_sleep(self):
          self.sleep = not self.sleep

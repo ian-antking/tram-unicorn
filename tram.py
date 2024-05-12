@@ -1,7 +1,7 @@
 import COLORS
 import time
 
-STEP_TIME = 1
+STEP_TIME = 1.5
 
 class Tram:
     def __init__(self, destination, wait, status, index):
@@ -15,8 +15,11 @@ class Tram:
         self.slice_start = 0
         self.slice_end = 4
         self.expanded = False
+        self.show_status = False
 
     def get_destination_text(self):
+        if self.show_status:
+            return self.status[self.slice_start: self.slice_end]
         return self.destination[self.slice_start: self.slice_end]
     
     def get_wait_text(self):
@@ -50,8 +53,9 @@ class Tram:
             self.slice_start += 1
             self.slice_end += 1
 
-            if self.slice_end > len(self.destination):
+            if self.slice_end > (len(self.status) if self.show_status else len(self.destination)):
                 self.slice_start = 0
                 self.slice_end = 4 if not self.expanded else 7
+                self.show_status = not self.show_status
 
             self.last_update = time_ms
