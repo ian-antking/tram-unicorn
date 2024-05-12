@@ -1,11 +1,12 @@
 import COLORS
 import time
 
-STEP_TIME = 1.5
+STEP_TIME = 1
 
 class Tram:
     def __init__(self, destination, wait, status, index):
-        self.destination = destination
+        dest_len = len(destination)
+        self.destination = destination if dest_len == 16 else destination + " " * (16 - dest_len)
         self.wait = wait
         self.status = status
         self.destination_x = 0
@@ -14,18 +15,11 @@ class Tram:
         self.last_update = time.ticks_ms()
         self.slice_start = 0
         self.slice_end = 4
-        self.expanded = False
-        self.show_status = False
 
     def get_destination_text(self):
-        if self.show_status:
-            return self.status[self.slice_start: self.slice_end]
         return self.destination[self.slice_start: self.slice_end]
     
     def get_wait_text(self):
-        if self.expanded:
-            return ""
-        
         return self.wait if len(self.wait) == 2 else " {wait}".format(wait=self.wait)
     
     def get_status_color(self):
@@ -43,19 +37,13 @@ class Tram:
     def should_update(self, time_ms):
         return time_ms - self.last_update > STEP_TIME * 1000
 
-    def update(self, time_ms):
-        if self.wait == "0" and not self.expanded:
-            self.expanded = True
-            self.slice_start = 0
-            self.slice_end = 7
-        
+    def update(self, time_ms):      
         if  self.should_update(time_ms):
             self.slice_start += 1
             self.slice_end += 1
 
-            if self.slice_end > (len(self.status) if self.show_status else len(self.destination)):
+            if self.slice_end > len(self.destination):
                 self.slice_start = 0
-                self.slice_end = 4 if not self.expanded else 7
-                self.show_status = not self.show_status
+                self.slice_end = 4
 
             self.last_update = time_ms
