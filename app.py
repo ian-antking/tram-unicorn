@@ -78,6 +78,7 @@ class App:
                 self.last_update_time = time_ms
                 self.tram_station.get()
                 self.screen.set_trams(self.tram_station.trams)
-                if not self.screen.message: self.screen.set_message(self.tram_station.message)
+                if not self.screen.message:                    
+                    self.screen.set_message(self.tram_station.message)
             
             self.screen.update(time_ms)

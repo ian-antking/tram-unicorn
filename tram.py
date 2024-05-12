@@ -12,7 +12,7 @@ class Tram:
         return "{destination}: {wait}".format(destination=self.destination[0:3], wait=self.wait)
     
     def get_status_color(self):
-        if self.status == "Departing":
+        if self.status == "Arrived" or self.status == "Departing":
             return COLORS.INFO
         if self.status == "Due":
             return COLORS.OK

@@ -3,6 +3,7 @@ import urequests # type: ignore
 class Station:
     def __init__(self, api_url, station_name, api_key, direction):
         self.api_url = api_url
+        self.station_name = station_name
         self.query = "?$filter=stationLocation eq '{station}'".format(station = station_name).replace(" ", "%20")
         self.direction = direction
         self.api_key = api_key
@@ -23,8 +24,9 @@ class Station:
         trams = filtered_trams[0]
         self.trams = []
 
-        self.message = trams["MessageBoard"]
-
+        message = trams["MessageBoard"]
+        self.message = message if message != "<no message>" else "Displaying {direction} trams for {station}".format(direction=self.direction, station=self.station_name)
+        
         if trams["Dest0"]: self.trams.append({
             "destination": trams["Dest0"],
             "wait": trams["Wait0"],
