@@ -1,3 +1,4 @@
+import machine
 from button_controller import ButtonController
 from network_manager import NetworkManager, wifi_status_handler
 import time # type: ignore
@@ -27,8 +28,11 @@ if __name__ == "__main__":
 
     while True:
 
-        time_ms = time.ticks_ms()
+        try:
+            time_ms = time.ticks_ms()
 
-        app.update(time_ms)
-        time.sleep(0.001)
+            app.update(time_ms)
+            time.sleep(0.001)
+        except Exception:
+            machine.reset()
 
