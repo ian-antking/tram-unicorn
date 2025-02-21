@@ -2,6 +2,8 @@ import COLORS
 from scroll_text import ScrollText
 from tram import Tram
 
+import CONFIG
+
 BACKGROUND_COLOUR = (0, 0, 0)
 MESSAGE_Y = 56
 
@@ -14,6 +16,7 @@ class Screen():
         self.last_update = time_ms
         self.background_color = background_color
         self.default_color = default_text_color
+        self.title = CONFIG.TRAM_STATION
 
         self.trams = []
         self.message = None
@@ -48,6 +51,9 @@ class Screen():
     def update(self, time_ms):
 
         self.clear_screen()
+        title_offset = (self.width // 2) - (self.graphics.measure_text(self.title, 1) // 2)
+
+        self.make_text(self.title, title_offset, 1)
 
         for tram in self.trams:
             self.graphics.set_pen(self.graphics.create_pen(*tram.get_status_color()))
