@@ -6,21 +6,18 @@ STEP_TIME = 1
 class Tram:
     def __init__(self, destination, wait, status, index):
         dest_len = len(destination)
-        self.destination = destination if dest_len == 16 else destination + " " * (16 - dest_len)
+        self.destination = destination
         self.wait = wait
         self.status = status
         self.destination_x = 0
-        self.wait_x = 23
+        self.wait_x = 105
         self.y = index * 8
         self.last_update = time.ticks_ms()
         self.slice_start = 0
         self.slice_end = 4
-
-    def get_destination_text(self):
-        return self.destination[self.slice_start: self.slice_end]
     
     def get_wait_text(self):
-        return self.wait if len(self.wait) == 2 else " {wait}".format(wait=self.wait)
+        return "{wait}min".format(wait=self.wait) if len(self.wait) == 2 else " {wait}min".format(wait=self.wait)
     
     def get_status_color(self):
         if self.status == "Arrived" or self.status == "Departing":

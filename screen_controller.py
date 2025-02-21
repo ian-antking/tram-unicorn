@@ -22,12 +22,6 @@ class Screen():
 
         self.destination_index = 0
 
-    def decrease_brightness(self):
-        self.screen.adjust_brightness(-0.1)
-    
-    def increase_brightness(self):
-        self.screen.adjust_brightness(0.1)
-
     def clear_screen(self):
         self.graphics.set_pen(self.graphics.create_pen(*self.background_color))
         self.graphics.clear()
@@ -59,7 +53,7 @@ class Screen():
             tram.update(time_ms)
             self.graphics.set_pen(self.graphics.create_pen(*tram.get_status_color()))
             self.graphics.line(tram.destination_x, tram.y + 7 , self.width, tram.y + 7)
-            self.make_text(tram.get_destination_text(), tram.destination_x, tram.y)
+            self.make_text(tram.destination, tram.destination_x, tram.y)
             self.make_text(tram.get_wait_text(), tram.wait_x, tram.y)
 
         if self.message:
