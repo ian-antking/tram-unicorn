@@ -51,7 +51,7 @@ class Screen():
     def update(self, time_ms):
 
         self.clear_screen()
-        title_offset = (self.width // 2) - (self.graphics.measure_text(self.title, 1) // 2)
+        title_offset = (self.width // 2) - (self.graphics.measure_text(self.title, 1) // 2) + 1
 
         self.make_text(self.title, title_offset, 1)
 
