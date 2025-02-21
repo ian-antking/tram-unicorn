@@ -6,11 +6,11 @@ BACKGROUND_COLOUR = (0, 0, 0)
 MESSAGE_Y = 24
 
 class Screen():
-    def __init__(self, cosmic_unicorn, graphics, time_ms, background_color= BACKGROUND_COLOUR, default_text_color= COLORS.WHITE):
-        self.cosmic_unicorn = cosmic_unicorn
+    def __init__(self, screen, graphics, time_ms, background_color= BACKGROUND_COLOUR, default_text_color= COLORS.WHITE):
+        self.screen = screen
         self.graphics = graphics
-        self.width = self.cosmic_unicorn.WIDTH
-        self.height = cosmic_unicorn.HEIGHT
+        self.width = self.screen.width
+        self.height = screen.height
         self.last_update = time_ms
         self.background_color = background_color
         self.default_color = default_text_color
@@ -19,15 +19,14 @@ class Screen():
         self.message = None
 
         self.graphics.set_font('bitmap8')
-        self.cosmic_unicorn.set_brightness(0.5)
 
         self.destination_index = 0
 
     def decrease_brightness(self):
-        self.cosmic_unicorn.adjust_brightness(-0.1)
+        self.screen.adjust_brightness(-0.1)
     
     def increase_brightness(self):
-        self.cosmic_unicorn.adjust_brightness(0.1)
+        self.screen.adjust_brightness(0.1)
 
     def clear_screen(self):
         self.graphics.set_pen(self.graphics.create_pen(*self.background_color))
@@ -41,7 +40,7 @@ class Screen():
         self.clear_screen()
         for message in messages:
             self.make_text(message, 0, 8 * messages.index(message), color or self.default_color)
-        self.cosmic_unicorn.update(self.graphics)
+        self.screen.update(self.graphics)
 
     def set_trams(self, trams):
         self.trams = []
@@ -70,5 +69,5 @@ class Screen():
         if self.message and self.message.state == "post-scroll":
             self.message = None
             
-        self.cosmic_unicorn.update(self.graphics)
+        self.screen.update(self.graphics)
 
