@@ -39,7 +39,7 @@ class Screen():
     def set_trams(self, trams):
         self.trams = []
         for i, tram in enumerate(trams):
-            new_tram = Tram(tram["destination"], tram["wait"], tram["status"], i)
+            new_tram = Tram(tram["destination"], tram["wait"], tram["status"], i, self.graphics)
             self.trams.append(new_tram)
 
     def set_message(self, message, color= None):
@@ -50,7 +50,6 @@ class Screen():
         self.clear_screen()
 
         for tram in self.trams:
-            tram.update(time_ms)
             self.graphics.set_pen(self.graphics.create_pen(*tram.get_status_color()))
             self.graphics.line(tram.destination_x, tram.y + 7 , self.width, tram.y + 7)
             self.make_text(tram.destination, tram.destination_x, tram.y)
