@@ -9,9 +9,9 @@ class Tram:
         self.destination = destination
         self.wait = wait
         self.status = status
-        self.destination_x = 0
+        self.destination_x = 1
         self.wait_x = 105
-        self.y = index * 8
+        self.y = (index * 10) + 1
         self.graphics = graphics
     
     def get_wait_text(self):

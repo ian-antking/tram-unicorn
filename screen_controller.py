@@ -3,7 +3,7 @@ from scroll_text import ScrollText
 from tram import Tram
 
 BACKGROUND_COLOUR = (0, 0, 0)
-MESSAGE_Y = 24
+MESSAGE_Y = 56
 
 class Screen():
     def __init__(self, screen, graphics, time_ms, background_color= BACKGROUND_COLOUR, default_text_color= COLORS.WHITE):
@@ -51,7 +51,7 @@ class Screen():
 
         for tram in self.trams:
             self.graphics.set_pen(self.graphics.create_pen(*tram.get_status_color()))
-            self.graphics.line(tram.destination_x, tram.y + 7 , self.width, tram.y + 7)
+            self.graphics.line(0, tram.y + 8 , self.width, tram.y + 8)
             self.make_text(tram.destination, tram.destination_x, tram.y)
             self.make_text(tram.get_wait_text(), tram.wait_x, tram.y)
 

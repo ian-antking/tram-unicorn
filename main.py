@@ -12,7 +12,7 @@ from API import *
 
 network_manager = NetworkManager(WIFI_CONFIG.COUNTRY, status_handler=wifi_status_handler)
 
-tram_repository = Station(URL, CONFIG.TRAM_STATION, CONFIG.API_KEY, DIRECTIONS[0])
+tram_repository = Station(URL, CONFIG.TRAM_STATION, CONFIG.API_KEY, DIRECTIONS[1])
 
 i75 = Interstate75(display=Interstate75.DISPLAY_INTERSTATE75_128X64)
 graphics = i75.display
