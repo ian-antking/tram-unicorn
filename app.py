@@ -5,12 +5,10 @@ import COLORS
 import time
 
 class App:
-    def __init__(self, network_manager, screen_manager, station_repository, button_controller):
+    def __init__(self, network_manager, screen_manager, station_repository):
         self.network = network_manager
         self.screen = screen_manager
         self.tram_station = station_repository
-        self.buttons = button_controller
-        self.sleep = False
         self.last_update_time = 0
 
         self.connect_wifi()
@@ -45,44 +43,16 @@ class App:
             self.screen.display_message(["getting", DIRECTIONS[1], "trams"], COLORS.INFO)
             self.get_data()
 
-    def handle_sleep(self):
-         self.sleep = not self.sleep
-
-    def increase_brightness(self):
-        self.screen.increase_brightness()
-
-    def decrease_brightness(self):
-        self.screen.decrease_brightness()
-
-    def handle_button_a(self):
-         self.screen.default_color = COLORS.WHITE
-
-    def handle_button_b(self):
-         self.screen.default_color = COLORS.RED
-
-    def handle_button_c(self):
-         self.screen.default_color = COLORS.GREEN
-
-    def handle_button_d(self):
-         self.screen.default_color = COLORS.BLUE
-
     def update(self, time_ms):
 
-        action = self.buttons.update()
+        if time_ms - self.last_update_time >= 60000:
+            if not self.network.isconnected():
+                self.connect_wifi()
 
-        if action:
-            getattr(self, action)()
-            time.sleep(0.5)
+            self.last_update_time = time_ms
+            data = self.tram_station.get()
 
-        if not self.sleep:
-            if time_ms - self.last_update_time >= 60000:
-                if not self.network.isconnected():
-                    self.connect_wifi()
-
-                self.last_update_time = time_ms
-                data = self.tram_station.get()
-
-                if len(data["trams"]): self.screen.set_trams(data["trams"])
-                if not self.screen.message: self.screen.set_message(data["message"])
-            
-            self.screen.update(time_ms)         
+            if len(data["trams"]): self.screen.set_trams(data["trams"])
+            if not self.screen.message: self.screen.set_message(data["message"])
+        
+        self.screen.update(time_ms)         

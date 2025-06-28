@@ -2,32 +2,28 @@ import COLORS
 from scroll_text import ScrollText
 from tram import Tram
 
+import CONFIG
+
 BACKGROUND_COLOUR = (0, 0, 0)
-MESSAGE_Y = 24
+MESSAGE_Y = 56
 
 class Screen():
-    def __init__(self, cosmic_unicorn, graphics, time_ms, background_color= BACKGROUND_COLOUR, default_text_color= COLORS.WHITE):
-        self.cosmic_unicorn = cosmic_unicorn
+    def __init__(self, screen, graphics, time_ms, background_color= BACKGROUND_COLOUR, default_text_color= COLORS.WHITE):
+        self.screen = screen
         self.graphics = graphics
-        self.width = self.cosmic_unicorn.WIDTH
-        self.height = cosmic_unicorn.HEIGHT
+        self.width = self.screen.width
+        self.height = screen.height
         self.last_update = time_ms
         self.background_color = background_color
         self.default_color = default_text_color
+        self.title = CONFIG.TRAM_STATION
 
         self.trams = []
         self.message = None
 
         self.graphics.set_font('bitmap8')
-        self.cosmic_unicorn.set_brightness(0.5)
 
         self.destination_index = 0
-
-    def decrease_brightness(self):
-        self.cosmic_unicorn.adjust_brightness(-0.1)
-    
-    def increase_brightness(self):
-        self.cosmic_unicorn.adjust_brightness(0.1)
 
     def clear_screen(self):
         self.graphics.set_pen(self.graphics.create_pen(*self.background_color))
@@ -41,12 +37,12 @@ class Screen():
         self.clear_screen()
         for message in messages:
             self.make_text(message, 0, 8 * messages.index(message), color or self.default_color)
-        self.cosmic_unicorn.update(self.graphics)
+        self.screen.update(self.graphics)
 
     def set_trams(self, trams):
         self.trams = []
         for i, tram in enumerate(trams):
-            new_tram = Tram(tram["destination"], tram["wait"], tram["status"], i)
+            new_tram = Tram(tram["destination"], tram["wait"], tram["status"], i, self.graphics)
             self.trams.append(new_tram)
 
     def set_message(self, message, color= None):
@@ -55,12 +51,14 @@ class Screen():
     def update(self, time_ms):
 
         self.clear_screen()
+        title_offset = (self.width // 2) - (self.graphics.measure_text(self.title, 1) // 2) + 1
+
+        self.make_text(self.title, title_offset, 1)
 
         for tram in self.trams:
-            tram.update(time_ms)
             self.graphics.set_pen(self.graphics.create_pen(*tram.get_status_color()))
-            self.graphics.line(tram.destination_x, tram.y + 7 , self.width, tram.y + 7)
-            self.make_text(tram.get_destination_text(), tram.destination_x, tram.y)
+            self.graphics.line(0, tram.y + 8 , self.width, tram.y + 8)
+            self.make_text(tram.destination, tram.destination_x, tram.y)
             self.make_text(tram.get_wait_text(), tram.wait_x, tram.y)
 
         if self.message:
@@ -70,5 +68,5 @@ class Screen():
         if self.message and self.message.state == "post-scroll":
             self.message = None
             
-        self.cosmic_unicorn.update(self.graphics)
+        self.screen.update(self.graphics)
 
