@@ -39,5 +39,6 @@ if __name__ == "__main__":
 
             app.update(time_ms)
             time.sleep(0.001)
-        except Exception:
+        except Exception as e:
+            print(e)
             machine.reset()
