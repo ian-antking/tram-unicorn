@@ -1,6 +1,6 @@
-import uasyncio
+import uasyncio # type: ignore
 import WIFI_CONFIG
-from API import DIRECTIONS
+from API import Direction
 import COLORS
 import time
 
@@ -10,6 +10,7 @@ class App:
         self.screen = screen_manager
         self.tram_station = station_repository
         self.last_update_time = 0
+        self.direction = Direction.INCOMING
 
         self.connect_wifi()
         self.get_data()
@@ -27,21 +28,23 @@ class App:
             time.sleep(10 ^ retries)
             self.connect_wifi(retries+1)
 
-    def get_data(self):
-        data = self.tram_station.get()
-        self.screen.set_trams(data["trams"])
+    def get_data(self, updateNow=False):
+        data = self.tram_station.get(updateNow)
+        self.screen.set_trams(data["trams"], self.direction)
         self.screen.set_message(data["message"])
 
 
     def display_incoming(self):
-            self.tram_station.set_destination(DIRECTIONS[0])
-            self.screen.display_message(["getting", DIRECTIONS[0], "trams"], COLORS.INFO)
-            self.get_data()
+            self.direction = Direction.INCOMING
+            self.tram_station.set_destination(self.direction)
+            self.screen.display_message(["getting", self.direction, "trams"], COLORS.INFO)
+            self.get_data(updateNow=True)
 
     def display_outgoing(self):
-            self.tram_station.set_destination(DIRECTIONS[1])
-            self.screen.display_message(["getting", DIRECTIONS[1], "trams"], COLORS.INFO)
-            self.get_data()
+            self.direction = Direction.OUTGOING
+            self.tram_station.set_destination(self.direction)
+            self.screen.display_message(["getting", self.direction, "trams"], COLORS.INFO)
+            self.get_data(updateNow=True)
 
     def update(self, time_ms):
 

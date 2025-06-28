@@ -16,7 +16,8 @@ class Screen():
         self.last_update = time_ms
         self.background_color = background_color
         self.default_color = default_text_color
-        self.title = CONFIG.TRAM_STATION
+        self.tram_station = CONFIG.TRAM_STATION
+        self.title = self.tram_station
 
         self.trams = []
         self.message = None
@@ -39,7 +40,9 @@ class Screen():
             self.make_text(message, 0, 8 * messages.index(message), color or self.default_color)
         self.screen.update(self.graphics)
 
-    def set_trams(self, trams):
+    def set_trams(self, trams, direction):
+        self.title = f"{self.tram_station} (To City)" if direction == "Incoming" else f"{self.tram_station} (From City)"
+
         self.trams = []
         for i, tram in enumerate(trams):
             new_tram = Tram(tram["destination"], tram["wait"], tram["status"], i, self.graphics)

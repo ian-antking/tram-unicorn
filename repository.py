@@ -12,7 +12,7 @@ class Station:
     def set_destination(self, direction):
         self.direction = direction
 
-    def get(self):
+    def get(self, updateNow=False):
         response = urequests.get(self.api_url + self.query, headers = { "Ocp-Apim-Subscription-Key": self.api_key })
         data = response.json()
         response.close()
@@ -21,7 +21,7 @@ class Station:
         filtered_trams = [tram for tram, tram in enumerate(trams_data) if tram["Direction"] == self.direction]
 
         trams_data = filtered_trams[0]
-        if trams_data["LastUpdated"] != self.last_update:
+        if trams_data["LastUpdated"] != self.last_update or updateNow:
             self.last_update = trams_data["LastUpdated"]
             trams = []
 

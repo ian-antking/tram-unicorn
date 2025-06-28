@@ -1,11 +1,9 @@
 import COLORS
-import time
 
 STEP_TIME = 1
 
 class Tram:
     def __init__(self, destination, wait, status, index, graphics):
-        dest_len = len(destination)
         self.destination = destination
         self.wait = wait
         self.status = status

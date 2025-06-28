@@ -1,2 +1,5 @@
 URL = "https://api.tfgm.com/odata/Metrolinks"
-DIRECTIONS = ["Incoming", "Outgoing"]
+
+class Direction:
+    INCOMING = "Incoming"
+    OUTGOING = "Outgoing"
