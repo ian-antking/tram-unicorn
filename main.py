@@ -8,6 +8,7 @@ from repository import Station
 from screen_controller import Screen
 from app import App
 from API import Direction
+from update import perform_update
 
 import WIFI_CONFIG
 import CONFIG
@@ -23,6 +24,7 @@ graphics = i75.display
 screen = Screen(i75, graphics, time.ticks_ms())
 
 app = App(network_manager, screen, tram_repository)
+perform_update()
 
 if __name__ == "__main__":
 
