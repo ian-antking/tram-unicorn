@@ -9,5 +9,6 @@
   "app.py",
   "tram.py",
   "API.py",
-  "repository.py"
+  "repository.py",
+  "version.txt"
 ]
