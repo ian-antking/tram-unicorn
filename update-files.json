@@ -1,13 +1,13 @@
 [
-  "main.py",
-  "app.py",
-  "API.py",
-  "network_manager.py",
-  "repository.py",
-  "screen_controller.py",
-  "scroll_text.py",
-  "tram.py",
   "COLORS.py",
+  "screen_controller.py",
+  "main.py",
+  "network_manager.py",
+  "scroll_text.py",
+  "build_release.py",
   "update.py",
-  "version.txt"
+  "app.py",
+  "tram.py",
+  "API.py",
+  "repository.py"
 ]
