@@ -16,25 +16,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-
       - name: Generate update-files.json and version.txt
         run: |
           echo "Generating update-files.json and version.txt..."
 
-          # Generate file list, excluding configs and .github
-          find . -maxdepth 1 -type f -name "*.py" \
+          file_list=$(find . -maxdepth 1 -type f -name "*.py" \
             ! -name "CONFIG.py" \
             ! -name "WIFI_CONFIG.py" \
             ! -name "CONFIG.example.py" \
             ! -name "WIFI_CONFIG.example.py" \
-            -exec basename {} \; \
-            | jq -R . | jq -s . > update-files.json
+            -exec basename {} \;)
 
-          echo "${GITHUB_REF##*/}" > version.txt  # write tag name, like v0.2.0
+          file_list=$(printf "%s\nversion.txt" "$file_list")
+
+          echo "$file_list" | jq -R . | jq -s . > update-files.json
+
+          echo "${GITHUB_REF##*/}" > version.txt
 
           echo "update-files.json contents:"
           cat update-files.json
