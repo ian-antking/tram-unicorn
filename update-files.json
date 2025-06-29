@@ -8,5 +8,6 @@
   "scroll_text.py",
   "tram.py",
   "COLORS.py",
-  "update.py"
+  "update.py",
+  "version.txt"
 ]
