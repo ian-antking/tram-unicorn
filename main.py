@@ -24,7 +24,7 @@ graphics = i75.display
 screen = Screen(i75, graphics, time.ticks_ms())
 
 app = App(network_manager, screen, tram_repository)
-perform_update()
+perform_update(screen)
 
 if __name__ == "__main__":
 

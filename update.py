@@ -58,7 +58,8 @@ def download_file(filename):
         print(f"Failed to download {filename}:", e)
     return False
 
-def perform_update():
+def perform_update(screen):
+    screen.display_message(["checking for updates..."])
     local_version = get_local_version()
     remote_version = get_remote_version()
     if remote_version is None:
@@ -68,6 +69,8 @@ def perform_update():
     print(f"Local version: {local_version}")
     print(f"Remote version: {remote_version}")
 
+    screen.display_message(["downloading version", remote_version])
+
     if remote_version != local_version:
         print("New version detected, updating files...")
         for f in FILES_TO_UPDATE:
@@ -76,6 +79,8 @@ def perform_update():
                 print("Update failed.")
                 return
         print("Update successful, rebooting...")
+        screen.display_message(["update successful", "rebooting"])
         machine.reset()
     else:
+        screen.display_message(["device is up to date"])
         print("Device is up to date.")
