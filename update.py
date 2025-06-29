@@ -1,24 +1,11 @@
 import urequests # type: ignore
 import machine # type: ignore
+import json
 
-GITHUB_RAW_BASE = "https://raw.githubusercontent.com/ian-antking/tram-unicorn/main/"
+BASE_RAW_URL = "https://raw.githubusercontent.com/ian-antking/tram-unicorn/main/"
 
-VERSION_URL = GITHUB_RAW_BASE + "version.txt"
-BASE_RAW_URL = GITHUB_RAW_BASE
-
-
-FILES_TO_UPDATE = [
-    "main.py",
-    "app.py",
-    "API.py",
-    "network_manager.py",
-    "repository.py",
-    "screen_controller.py",
-    "scroll_text.py",
-    "tram.py",
-    "COLORS.py",
-    "VERSION.py",
-]
+VERSION_URL = BASE_RAW_URL + "version.txt"
+FILES_LIST_URL = BASE_RAW_URL + "update-files.json"
 
 def get_remote_version():
     try:
@@ -41,6 +28,17 @@ def get_local_version():
         print("Failed to read local version:", e)
         return None
 
+def get_files_to_update():
+    try:
+        r = urequests.get(FILES_LIST_URL)
+        if r.status_code == 200:
+            files = json.loads(r.text)
+            r.close()
+            return files
+        r.close()
+    except Exception as e:
+        print("Failed to fetch files list:", e)
+    return []
 
 def download_file(filename):
     try:
@@ -73,7 +71,8 @@ def perform_update(screen):
 
     if remote_version != local_version:
         print("New version detected, updating files...")
-        for f in FILES_TO_UPDATE:
+        files_to_update = get_files_to_update()
+        for f in files_to_update:
             success = download_file(f)
             if not success:
                 print("Update failed.")

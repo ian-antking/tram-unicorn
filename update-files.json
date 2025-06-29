@@ -1,0 +1,12 @@
+[
+  "main.py",
+  "app.py",
+  "API.py",
+  "network_manager.py",
+  "repository.py",
+  "screen_controller.py",
+  "scroll_text.py",
+  "tram.py",
+  "COLORS.py",
+  "update.py"
+]
