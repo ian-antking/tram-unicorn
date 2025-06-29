@@ -1,6 +1,6 @@
 import urequests # type: ignore
 import machine # type: ignore
-import VERSION
+from version import CURRENT_VERSION
 
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/ian-antking/tram-unicorn/main/"
 
@@ -30,6 +30,7 @@ def get_remote_version():
             return remote_version
         r.close()
     except Exception as e:
+        print(e)
         print("Failed to get remote version:", e)
     return None
 
@@ -55,10 +56,10 @@ def perform_update():
         print("Could not retrieve remote version. Skipping update.")
         return
 
-    print(f"Local version: {version_const.VERSION}")
+    print(f"Local version: {CURRENT_VERSION}")
     print(f"Remote version: {remote_version}")
 
-    if remote_version != version_const.VERSION:
+    if remote_version != CURRENT_VERSION:
         print("New version detected, updating files...")
         for f in FILES_TO_UPDATE:
             success = download_file(f)
