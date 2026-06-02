@@ -2,6 +2,7 @@ import machine # type: ignore
 import WIFI_CONFIG
 from network_manager import NetworkManager, wifi_status_handler
 import time
+import ntptime # type: ignore
 from interstate75 import Interstate75, DISPLAY_INTERSTATE75_128X64, SWITCH_A, SWITCH_B # type: ignore
 import WIFI_CONFIG
 from repository import Station
@@ -13,6 +14,11 @@ from update import perform_update
 import WIFI_CONFIG
 import CONFIG
 from API import *
+
+REBOOT_HOUR = 3  # reboot at 3am to recover from memory leaks and pick up OTA updates
+
+def should_reboot(t):
+    return t[3] == REBOOT_HOUR and t[4] == 0 and t[5] < 2
 
 network_manager = NetworkManager(WIFI_CONFIG.COUNTRY, status_handler=wifi_status_handler)
 
@@ -38,6 +44,9 @@ if __name__ == "__main__":
 
         try:
             time_ms = time.ticks_ms()
+
+            if should_reboot(time.localtime()):
+                machine.reset()
 
             app.update(time_ms)
             time.sleep(0.001)
