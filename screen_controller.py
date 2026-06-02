@@ -61,7 +61,7 @@ class Screen():
         for tram in self.trams:
             self.graphics.set_pen(self.graphics.create_pen(*tram.get_status_color()))
             self.graphics.line(0, tram.y + 8 , self.width, tram.y + 8)
-            self.make_text(tram.destination, tram.destination_x, tram.y)
+            self.make_text(tram.get_destination_text(), tram.destination_x, tram.y)
             self.make_text(tram.get_wait_text(), tram.wait_x, tram.y)
 
         if self.message:
