@@ -45,7 +45,6 @@ if __name__ == "__main__":
         try:
             time_ms = time.ticks_ms()
 
-            # Nightly reboot at 3am — recovers memory leaks and picks up OTA updates
             if should_reboot(time.localtime()):
                 machine.reset()
 
