@@ -64,7 +64,7 @@ Colour indicates tram status:
 
 ## 🔄 Updates
 
-The app supports OTA updates via `update.py`. Drop updated files into the configured update source and they'll be pulled on next boot.
+The app supports OTA updates via `update.py`. Updates are issued as GitHub releases — the app will pull the latest release on next boot.
 
 ## 📦 Dependencies
 
