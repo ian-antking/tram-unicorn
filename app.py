@@ -1,5 +1,6 @@
 import uasyncio # type: ignore
 import ntptime # type: ignore
+import machine # type: ignore
 import WIFI_CONFIG
 from API import Direction
 import COLORS
@@ -23,6 +24,11 @@ class App:
             print("NTP sync ok:", time.localtime())
         except Exception as e:
             print("NTP sync failed:", e)
+            # Default to 03:30 so we won't reboot immediately and have
+            # roughly 24 hours before the next reboot window.
+            # RTC datetime tuple: (year, month, day, weekday, hour, minute, second, subsecond)
+            machine.RTC().datetime((2000, 1, 1, 6, 3, 30, 0, 0))
+            print("Falling back to default time 03:30:", time.localtime())
 
     def connect_wifi(self, retries=0):
         message = ["wait", "for", "wifi"]
