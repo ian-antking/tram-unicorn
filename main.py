@@ -2,6 +2,7 @@ import machine # type: ignore
 import WIFI_CONFIG
 from network_manager import NetworkManager, wifi_status_handler
 import time
+import ntptime # type: ignore
 from interstate75 import Interstate75, DISPLAY_INTERSTATE75_128X64, SWITCH_A, SWITCH_B # type: ignore
 import WIFI_CONFIG
 from repository import Station
